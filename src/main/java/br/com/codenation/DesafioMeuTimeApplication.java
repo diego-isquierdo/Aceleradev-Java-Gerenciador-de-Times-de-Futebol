@@ -54,7 +54,7 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
 	public Long buscarCapitaoDoTime(Long idTime) {
 		Validador.validaTime(!anyMatchTime(idTime));
 
-        Long capitao = getTimeById(idTime).getCapitao();
+        Long capitao = buscaTimePorId(idTime).getCapitao();
 		Validador.validaCapitao(capitao==null);
 
         return capitao;
@@ -62,12 +62,12 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
 
 	@Desafio("buscarNomeJogador")
 	public String buscarNomeJogador(Long idJogador) {
-		return getJogadorById(idJogador).getNome();
+		return buscaJogadorPorId(idJogador).getNome();
 	}
 
 	@Desafio("buscarNomeTime")
 	public String buscarNomeTime(Long idTime) {
-		return getTimeById(idTime).getNome();
+		return buscaTimePorId(idTime).getNome();
 	}
 
 	@Desafio("buscarJogadoresDoTime")
@@ -154,8 +154,8 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
 
 	@Desafio("buscarCorCamisaTimeDeFora")
 	public String buscarCorCamisaTimeDeFora(Long timeDaCasa, Long timeDeFora) {
-		Time mandante =  getTimeById(timeDaCasa);
-		Time visitante = getTimeById(timeDeFora);
+		Time mandante =  buscaTimePorId(timeDaCasa);
+		Time visitante = buscaTimePorId(timeDeFora);
 
 		if (mandante.getCorUniformePrincipal().compareTo(visitante.getCorUniformePrincipal())==0){
 			return visitante.getCorUniformeSecundario();
@@ -167,17 +167,17 @@ public class DesafioMeuTimeApplication implements MeuTimeInterface {
 
 
 	public void entregaBracadeira(Long idJogador){
-		getTimeById(getJogadorById(idJogador).getIdTime()).setCapitao(idJogador);
+		buscaTimePorId(buscaJogadorPorId(idJogador).getIdTime()).setCapitao(idJogador);
 	}
 
-	public Time getTimeById(Long id){
+	public Time buscaTimePorId(Long id){
         return times.stream()
                     .filter(t->t.getId().equals(id))
                     .findFirst()
                     .orElseThrow(TimeNaoEncontradoException::new);
     }
 
-    public Jogador getJogadorById(Long id){
+    public Jogador buscaJogadorPorId(Long id){
         return jogadores.stream()
                     .filter(p->p.getId().equals(id))
                     .findFirst()
